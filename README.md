@@ -6,6 +6,53 @@ Update Release for Tahmid IT Park Software
 
 Enterprise Monitor Com1 is a monitoring and release management project for Tahmid IT Park Software. This repository contains the code and resources used to build, deploy, and manage releases for enterprise monitoring components.
 
+┌──────────────────────────────────────────────────────────────--───┐
+│                     ELECTRON (Master Process)                     │
+│                                                                   │
+│  ┌──────────┐   ┌──────────────-┐   ┌──────────────────────────┐  │
+│  │  Tray    │   │  BrowserWindow│   │  Preload (Context Bridge)│  │
+│  │  Manager │   │  (Renderer)   │   │  • Secure IPC Bridge     │  │
+│  └──────────┘   └──────┬──────-─┘   └──────────────────────────┘  │
+│                        │ IPC Handlers                             │
+│  ┌─────────────────────┴───────────────────────────────────────┐  │
+│  │ Main Process: spawn → port.info handshake → ApiClient       │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+│          │ HTTP (dynamic port)                                    │
+└──────────┼───────────────────────────────────────────────────--───┘
+           │
+           ▼
+┌────────────────────────────────────────────────────────────────--─┐
+│              PYTHON BACKEND (Child Process)                       │
+│          ┌─────────────┐  ┌─────────────────┐                     │
+│          │   Windows   │  │     macOS        │                    │
+│          │  (pywin32,  │  │  (AppleScript,   │                    │
+│          │  UIAuto)    │  │  pyobjc, TCC)    │                    │
+│          └─────────────┘  └─────────────────┘                     │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │  FastAPI + Uvicorn (dynamic port, 127.0.0.1 only)            │ │
+│  │  • JWT Auth  • REST API  • CORS  • Lifecycle Hooks           │ │ 
+│  │  • Graceful Shutdown Endpoint (/api/shutdown)                | │
+│  └──────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────────────┐    │
+│  │Screenshot│ │App       │ │Browser   │ │Keylogger           │    │
+│  │Monitor   │ │Tracker   │ │Tracker   │ │(pynput)            │    │
+│  └──────────┘ └──────────┘ └──────────┘ └────────────────────┘    │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────────────┐    │
+│  │Clipboard │ │Screen    │ │Sync      │ │Data Cleanup Service│    │
+│  │Monitor   │ │Recorder  │ │Service   │ │(7-day database)    │    │
+│  │          │ │(OpenCV)  │ │(v2 - 6)  │ └────────────────────┘    │
+│  └──────────┘ └──────────┘ └──────────┘                           │
+│                                                                   │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │  SQLite (WAL mode, shared connection, thread-safe Lock)      │ │
+│  │  • screenshots • app_activity • browser_activity             │ │
+│  │  • clipboard_events • text_logs • video_recordings           │ │
+│  │  • device_config                                             │ │
+│  └──────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────--┘
+
 ## Features
 
 - Release automation and packaging
@@ -47,7 +94,7 @@ These instructions will help you set up the project locally for development and 
 Contributions are welcome. Please open an issue to discuss major changes before creating a pull request. When contributing:
 
 1. Fork the repository
-2. Create a new branch for your feature or bugfix
+2. Create a new branch for your feature or bug fix
 3. Commit your changes with clear messages
 4. Open a Pull Request describing your changes
 
