@@ -6,6 +6,9 @@ Update Release for Tahmid IT Park Software
 
 Enterprise Monitor Com1 is a monitoring and release management project for Tahmid IT Park Software. This repository contains the code and resources used to build, deploy, and manage releases for enterprise monitoring components.
 
+## 🏗️ Architecture Overview
+
+```
 ┌──────────────────────────────────────────────────────────────--───┐
 │                     ELECTRON (Master Process)                     │
 │                                                                   │
@@ -52,6 +55,7 @@ Enterprise Monitor Com1 is a monitoring and release management project for Tahmi
 │  │  • device_config                                             │ │
 │  └──────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────--┘
+```
 
 ## Features
 
